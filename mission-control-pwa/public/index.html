@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcription | Mission Control</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="manifest" href="/manifest.json">
+</head>
+<body id="page-transcription">
+    
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <img src="/assets/images/logo.svg" alt="Mission Control Logo">
+        <h1>MISSION CONTROL</h1>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="/index.html" class="nav-link active">Transcription</a>
+        <a href="/analyzers.html" class="nav-link ">Analyzers</a>
+        <a href="/history.html" class="nav-link ">History</a>
+    </nav>
+</aside>
+    <main class="main-content">
+        <div class="main-header">
+            <h2>Transcription & Orchestration</h2>
+        </div>
+        <div class="content-body">
+            <div class="card">
+                <div class="card-header">Orchestration Trigger</div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="project-title" class="form-label">Project Title</label>
+                        <input type="text" id="project-title" class="form-control" placeholder="e.g., Q4 Product Strategy Meeting">
+                    </div>
+                     <div class="form-group">
+                        <label for="transcript-input" class="form-label">Paste Multi-Speaker Transcript Here</label>
+                        <textarea id="transcript-input" placeholder="Speaker A: Let's begin the meeting...&#10;Speaker B: Thanks for joining everyone."></textarea>
+                    </div>
+                    <button id="orchestrate-btn" class="btn btn-primary" disabled>Orchestrate</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">Status Console</div>
+                <div id="status-console" class="status-console">
+                    Orchestrator is idle. Input a transcript to begin.
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+</body>
+</html>
