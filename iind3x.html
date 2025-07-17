@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mission Control - Test Mode</title>
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+    <div id="glitter-bg"></div>
+    <div class="relative min-h-screen flex flex-col lg:flex-row">
+        <!-- Mobile Header -->
+        <div class="lg:hidden flex justify-between items-center p-4 bg-[#161B22] border-b border-[#30363D]">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center rounded-md">
+                    <span class="font-bold text-white text-lg">M</span>
+                </div>
+                <h1 class="text-base font-semibold text-white tracking-wider">MISSION CONTROL</h1>
+            </div>
+            <button id="mobile-menu-btn" class="text-gray-400" aria-label="Toggle menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="sidebar fixed inset-y-0 left-0 w-56 p-4 flex-col justify-between transform -translate-x-full lg:relative lg:translate-x-0 lg:flex transition-transform duration-300 ease-in-out z-20"
+            aria-label="Sidebar Navigation">
+            <div>
+                <div class="hidden lg:flex items-center gap-3 mb-8">
+                    <div class="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center rounded-md">
+                        <span class="font-bold text-white text-base">M</span>
+                    </div>
+                    <h1 class="text-base font-semibold text-white tracking-wider">MISSION CONTROL</h1>
+                </div>
+                <nav class="flex flex-col gap-2" role="navigation" aria-label="Main navigation">
+                    <a href="#" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md"><span>Dashboard</span></a>
+                    <a href="#" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md"><span>Meeting</span></a>
+                    <a href="./index.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md active" aria-current="page"><span>Transcriptions</span></a>
+                    <a href="#" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md"><span>Analyzers</span></a>
+                    <a href="#" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md"><span>Agents</span></a>
+                    <a href="#" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md"><span>Project Mngt</span></a>
+                    <a href="#" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md"><span>Workspace</span></a>
+                </nav>
+            </div>
+            <div class="flex flex-col gap-2">
+                <a href="#" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md"><span>Settings</span></a>
+                <a href="#" class="nav-link flex items-center gap-3 px-3 py-2 rounded-md"><span>Logout</span></a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content flex-1 p-4 lg:p-8 overflow-y-auto transition-all duration-300 ease-in-out lg:ml-0" tabindex="0">
+            <h2 class="text-2xl font-bold text-white mb-6">Transcription</h2>
+            <div class="space-y-6">
+
+                <!-- Transcription Input Section -->
+                <section class="card p-5 space-y-5" aria-labelledby="transcription-sources-title">
+                    <h3 id="transcription-sources-title" class="text-lg font-semibold text-white">Transcription Sources</h3>
+                    
+                    <!-- Permanent/Default URL -->
+                    <div class="p-4 border border-[#30363D] rounded-lg space-y-3">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <h4 class="text-base font-medium text-white">Default Source URL (Supabase)</h4>
+                            <label class="toggle-label" title="Enable hourly scan for new transcription endpoints at this URL">
+                                <span class="text-sm mr-3 text-gray-300">Keep URL as Default</span>
+                                <input type="checkbox" id="keep-url-default-toggle" class="toggle-input" />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-3">
+                           <input type="text" id="supabase-url-input" placeholder="https://your-supabase-url.com/endpoint" class="input-field flex-grow" />
+                        </div>
+                         <p id="scan-status" class="text-xs text-gray-500 h-4">Auto-scan disabled. Last checked: Never.</p>
+                    </div>
+
+                    <!-- Manual URL -->
+                    <div class="p-4 border border-[#30363D] rounded-lg space-y-3">
+                        <h4 class="text-base font-medium text-white">Manual Source URL</h4>
+                        <div class="flex flex-col sm:flex-row items-stretch gap-3">
+                           <input type="text" id="manual-url-input" placeholder="https://example.com/mymeeting.mp3" class="input-field flex-grow" />
+                           <button id="manual-transcribe-btn" class="btn-primary" type="button">Transcribe</button>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Editable Transcription Output -->
+                <section id="transcription-output-card" class="card p-5" aria-labelledby="transcript-output-title">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                        <h3 id="transcript-output-title" class="text-lg font-semibold text-white">Transcription Output (Editable)</h3>
+                        <div id="transcription-loader" class="hidden flex items-center gap-3" role="status" aria-live="polite" aria-label="Transcribing">
+                            <div class="w-5 h-5 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
+                            <span class="text-sm text-gray-400">Transcribing...</span>
+                        </div>
+                    </div>
+                    
+                    <div id="transcript-output-text" contenteditable="true" class="console-box w-full h-80" aria-label="Editable meeting transcript"></div>
+                    
+                    <div class="border-t border-[#30363D] my-5"></div>
+                    
+                    <div class="flex items-center justify-between gap-6">
+                         <div>
+                            <label for="project-type-select" class="block mb-2 text-xs font-medium text-gray-400">Project Type (Optional)</label>
+                            <select id="project-type-select" class="bg-[#0D1117] border border-[#30363D] text-[#C9D1D9] text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-2.5">
+                                <option selected value="">Let AI Auto-Select Project Type...</option>
+                                <option value="customer-service">Customer Service & Call Centers</option>
+                                <option value="e-commerce">E-commerce & Online Retail</option>
+                                <option value="financial-services">Financial Services & Banking</option>
+                                <option value="healthcare">Healthcare & Telemedicine</option>
+                                <option value="logistics">Logistics & Supply Chain</option>
+                                <option value="manufacturing">Manufacturing & Quality Control</option>
+                                <option value="marketing">Marketing & Advertising</option>
+                                <option value="human-resources">Human Resources & Recruitment</option>
+                                <option value="real-estate">Real Estate & Property Management</option>
+                                <option value="education">Education & EdTech</option>
+                                <option value="insurance">Insurance & Risk Management</option>
+                                <option value="legal-services">Legal Services & Document Review</option>
+                                <option value="cybersecurity">Cybersecurity & Fraud Detection</option>
+                                <option value="social-media">Social Media & Content Management</option>
+                                <option value="travel-hospitality">Travel & Hospitality</option>
+                                <option value="agriculture">Agriculture & Precision Farming</option>
+                                <option value="automotive">Automotive & Autonomous Vehicles</option>
+                                <option value="energy-utilities">Energy & Utilities Management</option>
+                                <option value="entertainment-media">Entertainment & Media Production</option>
+                                <option value="software-development">Software Development & Testing</option>
+                            </select>
+                        </div>
+                        <button id="runOrchestrationBtn" class="btn-primary self-end" disabled type="button">Start Orchestration</button>
+                    </div>
+                    <div id="orchestration-loader" class="hidden flex items-center gap-3 mt-4" role="status" aria-live="polite" aria-label="Orchestrating">
+                        <div class="w-5 h-5 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin" aria-hidden="true"></div>
+                        <span class="text-sm text-gray-400">Processing...</span>
+                    </div>
+                </section>
+
+                <section id="ai-controls-container" class="card p-5 space-y-4 hidden" aria-labelledby="ai-controls-title">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <h3 id="ai-controls-title" class="text-lg font-semibold text-white">AI Agent Controls</h3>
+                        <div class="flex items-center gap-4 sm:gap-6 flex-wrap">
+                            <label class="toggle-label" title="Automate Analyzers" for="auto-analyze-toggle"><span class="text-sm mr-2">Analyze</span><input type="checkbox" id="auto-analyze-toggle" class="toggle-input" checked /><span class="toggle-slider"></span></label>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="orchestrator-container" class="card p-5 space-y-4 hidden" aria-labelledby="orchestrator-title">
+                    <h3 id="orchestrator-title" class="text-lg font-semibold text-white">Orchestrator Analysis</h3>
+                    <div id="orchestrator-console" class="console-box" role="region" aria-live="polite" aria-atomic="true"><span class="console-text"></span><span class="blinking-cursor" aria-hidden="true">|</span></div>
+                </section>
+
+                <section id="analyzer-consoles-container" class="space-y-6" aria-live="polite" aria-atomic="true"></section>
+
+                <section id="mission-executive-container" class="card p-5 space-y-4 hidden" aria-labelledby="mission-executive-title" style="position:relative;">
+                    <h3 id="mission-executive-title" class="text-xl font-bold text-white flex items-center justify-between">
+                        Mission Executive Synthesis
+                        <button id="copyMissionExecutiveBtn" class="copy-btn" aria-label="Copy Mission Executive content to clipboard" title="Copy to clipboard"><i class="fas fa-copy"></i></button>
+                    </h3>
+                    <div id="mission-executive-console" class="console-box" role="region" aria-live="polite" aria-atomic="true"><span class="console-text"></span><span class="blinking-cursor" aria-hidden="true">|</span></div>
+                </section>
+
+                <section id="lead-developer-container" class="card p-5 space-y-4 hidden" aria-labelledby="lead-developer-title" style="position:relative;">
+                    <h3 id="lead-developer-title" class="text-xl font-bold text-white flex items-center justify-between w-full">
+                        <span>Lead Developer Agent</span>
+                        <button id="copyLeadDevBtn" class="copy-btn" aria-label="Copy Lead Developer content to clipboard" title="Copy to clipboard"><i class="fas fa-copy"></i></button>
+                    </h3>
+                     <div class="flex justify-end w-full">
+                         <label class="toggle-label" title="Automate Lead Developer Agent">
+                            <span class="text-sm mr-2">Auto Run Lead Developer</span>
+                            <input type="checkbox" id="auto-leaddev-run-toggle" class="toggle-input" checked />
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div id="lead-developer-console" class="console-box" role="region" aria-live="polite" aria-atomic="true"><span class="console-text"></span><span class="blinking-cursor" aria-hidden="true">|</span></div>
+                </section>
+
+                <section id="next-step-container" class="flex justify-end mt-4 hidden">
+                    <a href="./generate-project.html" class="btn-primary" role="button" tabindex="0">Proceed to Project Generation →</a>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Static JavaScript Libraries -->
+    <script src="js/firebase-app-compat.js"></script>
+    <script src="js/firebase-database-compat.js"></script>
+    <script src="js/markdown-it.min.js"></script>
+    <!-- Main Application Logic -->
+    <script src="js/main.js"></script>
+</body>
+</html>
